@@ -23,7 +23,7 @@ public class HomebankingApplication {
 			client1.setLastName("Morel");
 			client1.setEmail("melba@mindhub.com");
 
-			Client client2 = new Client("Miguel", "Frugoni", "mail@mail.com");
+			Client client2 = new Client("Miguel", "Frugoni", "mmf@email.com");
 
 			clientRepository.save(client1);
 			clientRepository.save(client2);

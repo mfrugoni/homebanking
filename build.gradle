@@ -12,6 +12,12 @@ java {
 }
 
 repositories {
+	bootRun {
+
+		sourceResources sourceSets.main
+
+	}
+
 	mavenCentral()
 }
 
