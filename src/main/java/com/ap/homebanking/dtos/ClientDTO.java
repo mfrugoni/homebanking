@@ -1,10 +1,10 @@
 package com.ap.homebanking.dtos;
 
-import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
 
-import java.util.HashSet;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
 
 public class ClientDTO {
     private long Id;
@@ -12,7 +12,7 @@ public class ClientDTO {
     private String lastName;
     private String email;
 
-    //Set<Account> accounts = new HashSet<>();
+    Set<AccountDto> accounts;
 
     public ClientDTO(Client client){
         this.Id = client.getId();
@@ -22,6 +22,10 @@ public class ClientDTO {
         this.lastName = client.getLastName();
 
         this.email = client.getEmail();
+
+        this.accounts = client.getAccounts().stream().map(account -> new AccountDto(account)).collect(toSet());
+
+               //
     }
 
     public long getId() {
@@ -38,5 +42,9 @@ public class ClientDTO {
 
     public String getEmail() {
         return email;
+    }
+
+    public Set<AccountDto> getAccounts() {
+        return accounts;
     }
 }
