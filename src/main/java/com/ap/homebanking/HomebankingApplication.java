@@ -40,7 +40,12 @@ public class HomebankingApplication {
 
 			Client client2 = new Client("Mikaela", "Schiffrin", "mika@email.com");
 
+			Account account3 = new Account("AA12", today, 12300);
+
 			clientRepository.save(client2);
+			client2.addAccount(account3);
+			accountRepository.save(account3);
+
 		});
 	}
 
