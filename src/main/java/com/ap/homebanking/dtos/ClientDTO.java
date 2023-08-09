@@ -12,7 +12,7 @@ public class ClientDTO {
     private String lastName;
     private String email;
 
-    Set<AccountDTO> accounts;
+    private Set<AccountDTO> accounts;
 
     public ClientDTO(Client client){
         this.id = client.getId();
