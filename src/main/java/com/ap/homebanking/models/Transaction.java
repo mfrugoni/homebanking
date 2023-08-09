@@ -2,10 +2,7 @@ package com.ap.homebanking.models;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,6 +15,10 @@ public class Transaction {
     private double amount;
     private String description;
     private LocalDateTime date;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="account_id")
+    private Account account;
 
     public Transaction(){}
 
@@ -62,5 +63,13 @@ public class Transaction {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }
