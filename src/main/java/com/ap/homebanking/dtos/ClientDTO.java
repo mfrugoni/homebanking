@@ -7,15 +7,15 @@ import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 
 public class ClientDTO {
-    private long Id;
+    private long id;
     private String firstName;
     private String lastName;
     private String email;
 
-    Set<AccountDto> accounts;
+    Set<AccountDTO> accounts;
 
     public ClientDTO(Client client){
-        this.Id = client.getId();
+        this.id = client.getId();
 
         this.firstName = client.getFirstName();
 
@@ -23,13 +23,13 @@ public class ClientDTO {
 
         this.email = client.getEmail();
 
-        this.accounts = client.getAccounts().stream().map(account -> new AccountDto(account)).collect(toSet());
+        this.accounts = client.getAccounts().stream().map(account -> new AccountDTO(account)).collect(toSet());
 
                //
     }
 
     public long getId() {
-        return Id;
+        return id;
     }
 
     public String getFirstName() {
@@ -44,7 +44,7 @@ public class ClientDTO {
         return email;
     }
 
-    public Set<AccountDto> getAccounts() {
+    public Set<AccountDTO> getAccounts() {
         return accounts;
     }
 }
