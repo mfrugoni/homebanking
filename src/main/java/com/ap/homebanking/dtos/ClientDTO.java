@@ -25,7 +25,6 @@ public class ClientDTO {
 
         this.accounts = client.getAccounts().stream().map(account -> new AccountDTO(account)).collect(toSet());
 
-               //
     }
 
     public long getId() {
