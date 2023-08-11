@@ -1,11 +1,9 @@
 package com.ap.homebanking;
 
-import com.ap.homebanking.models.Account;
-import com.ap.homebanking.models.Client;
-import com.ap.homebanking.models.Transaction;
-import com.ap.homebanking.models.TransactionType;
+import com.ap.homebanking.models.*;
 import com.ap.homebanking.repositories.AccountRepository;
 import com.ap.homebanking.repositories.ClientRepository;
+import com.ap.homebanking.repositories.LoanRepository;
 import com.ap.homebanking.repositories.TransactionRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @SpringBootApplication
 public class HomebankingApplication {
@@ -23,7 +22,7 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository){
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository){
 		return (args -> {
 
 			//Melba Morel Data:
@@ -71,6 +70,15 @@ public class HomebankingApplication {
 			account3.addTransaction(trans6);
 			transactionRepository.save(trans5);
 			transactionRepository.save(trans6);
+
+
+			Loan loan1 = new Loan("Hipotecario", 500000, List.of(12, 24, 36, 48, 60));
+			Loan loan2 = new Loan("Personal", 100000, List.of(6, 12, 24));
+			Loan loan3 = new Loan("Automotriz", 300000, List.of(6, 12, 24, 36));
+
+			loanRepository.save(loan1);
+			loanRepository.save(loan2);
+			loanRepository.save(loan3);
 
 		});
 	}

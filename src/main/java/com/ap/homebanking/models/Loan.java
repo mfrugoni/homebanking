@@ -1,13 +1,16 @@
 package com.ap.homebanking.models;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Loan {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     private long id;
     private String name;
     private double maxAmount;
@@ -17,8 +20,7 @@ public class Loan {
 
     public Loan(){}
 
-    public Loan(long id, String name, double maxAmount, List<Integer> payments){
-        this.id = id;
+    public Loan(String name, double maxAmount, List<Integer> payments){
         this.name = name;
         this.maxAmount = maxAmount;
         this.payments = payments;
