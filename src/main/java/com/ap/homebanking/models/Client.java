@@ -77,4 +77,9 @@ public class Client {
         account.setClient(this);
         accounts.add(account);
     }
+
+    public void addClientLoan(ClientLoan clientLoan){
+        clientLoan.setClient(this);
+        clientClientLoans.add(clientLoan);
+    }
 }
