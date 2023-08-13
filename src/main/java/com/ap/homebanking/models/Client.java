@@ -4,7 +4,10 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
 public class Client {
@@ -81,5 +84,9 @@ public class Client {
     public void addClientLoan(ClientLoan clientLoan){
         clientLoan.setClient(this);
         clientClientLoans.add(clientLoan);
+    }
+
+    public List<Loan> getLoans(){
+        return clientClientLoans.stream().map(clientLoan -> clientLoan.getLoan()).collect(toList());
     }
 }
