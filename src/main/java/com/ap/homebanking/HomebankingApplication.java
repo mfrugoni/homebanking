@@ -1,10 +1,7 @@
 package com.ap.homebanking;
 
 import com.ap.homebanking.models.*;
-import com.ap.homebanking.repositories.AccountRepository;
-import com.ap.homebanking.repositories.ClientRepository;
-import com.ap.homebanking.repositories.LoanRepository;
-import com.ap.homebanking.repositories.TransactionRepository;
+import com.ap.homebanking.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,7 +19,11 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository){
+	public CommandLineRunner initData(ClientRepository clientRepository,
+									  AccountRepository accountRepository,
+									  TransactionRepository transactionRepository,
+									  LoanRepository loanRepository,
+									  ClientLoanRepository clientLoanRepository){
 		return (args -> {
 
 			//Melba Morel Data:
@@ -41,10 +42,12 @@ public class HomebankingApplication {
 			Transaction trans4 = new Transaction(TransactionType.DEBIT, -1125.44, "TAXES", LocalDateTime.now());
 
 			clientRepository.save(client1);
+
 			client1.addAccount(account1);
 			client1.addAccount(account2);
 			accountRepository.save(account1);
 			accountRepository.save(account2);
+
 			account1.addTransaction(trans1);
 			account1.addTransaction(trans2);
 			account2.addTransaction(trans3);
@@ -54,8 +57,7 @@ public class HomebankingApplication {
 			transactionRepository.save(trans3);
 			transactionRepository.save(trans4);
 
-
-
+			//Mika Schiffrin Data:
 			Client client2 = new Client("Mikaela", "Schiffrin", "mika@email.com");
 
 			Account account3 = new Account("AA12", today, 12300);
@@ -79,6 +81,18 @@ public class HomebankingApplication {
 			loanRepository.save(loanHipotecario);
 			loanRepository.save(loanPersonal);
 			loanRepository.save(loanAutomotriz);
+
+			ClientLoan melbaLoanHipotecario = new ClientLoan(400000, 60, client1, loanHipotecario);
+			ClientLoan melbaLoanPersonal = new ClientLoan(50000, 12, client1, loanPersonal);
+
+			ClientLoan mikaLoanPersonal = new ClientLoan(100000, 24, client2, loanPersonal);
+			ClientLoan mikaLoanAuto = new ClientLoan(200000, 36, client2, loanAutomotriz);
+
+			clientLoanRepository.save(melbaLoanHipotecario);
+			clientLoanRepository.save(melbaLoanPersonal);
+			clientLoanRepository.save(mikaLoanPersonal);
+			clientLoanRepository.save(mikaLoanAuto);
+
 
 		});
 	}

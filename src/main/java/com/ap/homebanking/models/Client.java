@@ -1,5 +1,6 @@
 package com.ap.homebanking.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -86,6 +87,7 @@ public class Client {
         clientClientLoans.add(clientLoan);
     }
 
+    @JsonIgnore
     public List<Loan> getLoans(){
         return clientClientLoans.stream().map(clientLoan -> clientLoan.getLoan()).collect(toList());
     }
