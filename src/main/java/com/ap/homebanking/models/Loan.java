@@ -23,7 +23,7 @@ public class Loan {
     private List<Integer> payments = new ArrayList<>();
 
     @OneToMany(mappedBy = "loan", fetch = FetchType.EAGER)
-    private Set<ClientLoan> loansClientLoans = new HashSet<>();
+    private Set<ClientLoan> clientLoans = new HashSet<>();
     public Loan(){}
 
     public Loan(String name, double maxAmount, List<Integer> payments){
@@ -60,20 +60,21 @@ public class Loan {
         this.payments = payments;
     }
 
-    public Set<ClientLoan> getLoansClientLoans() {
-        return loansClientLoans;
+    public Set<ClientLoan> getClientLoans() {
+        return clientLoans;
     }
 
-    public void setLoansClientLoans(Set<ClientLoan> loansClientLoans) {
-        this.loansClientLoans = loansClientLoans;
+    public void setClientLoans(Set<ClientLoan> clientLoans) {
+        this.clientLoans = clientLoans;
     }
 
     public void addClientLoan(ClientLoan clientLoan){
         clientLoan.setLoan(this);
-        loansClientLoans.add(clientLoan);
+        clientLoans.add(clientLoan);
     }
 
+
     public List<Client> getClients(){
-        return loansClientLoans.stream().map(clientLoan -> clientLoan.getClient()).collect(toList());
+        return clientLoans.stream().map(clientLoan -> clientLoan.getClient()).collect(toList());
     }
 }

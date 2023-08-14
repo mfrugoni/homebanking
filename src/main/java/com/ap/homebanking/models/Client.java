@@ -1,6 +1,5 @@
 package com.ap.homebanking.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -23,7 +22,7 @@ public class Client {
     private Set<Account> accounts = new HashSet<>();
 
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
-    private Set<ClientLoan> clientClientLoans = new HashSet<>();
+    private Set<ClientLoan> clientLoans = new HashSet<>();
 
     public Client(){}
 
@@ -69,12 +68,12 @@ public class Client {
         this.accounts = accounts;
     }
 
-    public Set<ClientLoan> getClientClientLoans() {
-        return clientClientLoans;
+    public Set<ClientLoan> getClientLoans() {
+        return clientLoans;
     }
 
-    public void setClientClientLoans(Set<ClientLoan> clientClientLoans) {
-        this.clientClientLoans = clientClientLoans;
+    public void setClientLoans(Set<ClientLoan> clientLoans) {
+        this.clientLoans = clientLoans;
     }
 
     public void addAccount(Account account){
@@ -84,11 +83,10 @@ public class Client {
 
     public void addClientLoan(ClientLoan clientLoan){
         clientLoan.setClient(this);
-        clientClientLoans.add(clientLoan);
+        clientLoans.add(clientLoan);
     }
 
-    @JsonIgnore
     public List<Loan> getLoans(){
-        return clientClientLoans.stream().map(clientLoan -> clientLoan.getLoan()).collect(toList());
+        return clientLoans.stream().map(clientLoan -> clientLoan.getLoan()).collect(toList());
     }
 }
