@@ -1,26 +1,27 @@
 package com.ap.homebanking.dtos;
 
-import com.ap.homebanking.models.Client;
 import com.ap.homebanking.models.ClientLoan;
 import com.ap.homebanking.models.Loan;
 
 public class ClientLoanDTO {
     private long id;
+    private long loanId;
+    private String name;
     private double amount;
     private int payments;
-    private Client client;
-    private Loan loan;
+
 
     public ClientLoanDTO(ClientLoan clientLoan){
+
         this.id = clientLoan.getId();
+
+        this.loanId = clientLoan.getLoan().getId();
+
+        this.name = clientLoan.getLoan().getName();
 
         this.amount = clientLoan.getAmount();
 
         this.payments = clientLoan.getPayments();
-
-        this.client = clientLoan.getClient();
-
-        this.loan = clientLoan.getLoan();
     }
 
     public long getId() {
@@ -35,11 +36,7 @@ public class ClientLoanDTO {
         return payments;
     }
 
-    public Client getClient() {
-        return client;
-    }
+    public long getLoanId() { return loanId; }
 
-    public Loan getLoan() {
-        return loan;
-    }
+    public String getName() { return name; }
 }
