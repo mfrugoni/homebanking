@@ -1,2 +1,4 @@
-package com.ap.homebanking.models;public class Card {
+package com.ap.homebanking.models;
+
+public class Card {
 }
