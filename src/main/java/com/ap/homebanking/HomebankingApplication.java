@@ -23,7 +23,8 @@ public class HomebankingApplication {
 									  AccountRepository accountRepository,
 									  TransactionRepository transactionRepository,
 									  LoanRepository loanRepository,
-									  ClientLoanRepository clientLoanRepository){
+									  ClientLoanRepository clientLoanRepository,
+									  CardRepository cardRepository){
 		return (args -> {
 
 			//Melba Morel Data:
@@ -92,6 +93,10 @@ public class HomebankingApplication {
 			clientLoanRepository.save(melbaLoanPersonal);
 			clientLoanRepository.save(mikaLoanPersonal);
 			clientLoanRepository.save(mikaLoanAuto);
+
+			String melbaCardHolder = client1.getFirstName() + " " + client1.getLastName();
+			//Card melbaGoldDebit = new Card(melbaCardHolder, CardType.DEBIT, CardColor.GOLD, 5555666677778888, 773, LocalDate.now(), LocalDate.now().plusYears(5));
+
 
 
 		});
