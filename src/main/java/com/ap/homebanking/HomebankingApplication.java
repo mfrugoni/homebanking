@@ -89,6 +89,12 @@ public class HomebankingApplication {
 			ClientLoan mikaLoanPersonal = new ClientLoan(100000, 24, client2, loanPersonal);
 			ClientLoan mikaLoanAuto = new ClientLoan(200000, 36, client2, loanAutomotriz);
 
+			client1.addClientLoan(melbaLoanHipotecario);
+			client1.addClientLoan(melbaLoanPersonal);
+
+			client2.addClientLoan(mikaLoanPersonal);
+			client2.addClientLoan(mikaLoanAuto);
+
 			clientLoanRepository.save(melbaLoanHipotecario);
 			clientLoanRepository.save(melbaLoanPersonal);
 			clientLoanRepository.save(mikaLoanPersonal);
@@ -96,8 +102,15 @@ public class HomebankingApplication {
 
 			String melbaCardHolder = client1.getFirstName() + " " + client1.getLastName();
 			Card melbaGoldDebit = new Card(melbaCardHolder, CardType.DEBIT, CardColor.GOLD, "5555666677778888", 773, LocalDate.now(), LocalDate.now().plusYears(5));
+			Card melbaTitaniumCredit = new Card(melbaCardHolder, CardType.CREDIT, CardColor.TITANIUM, "1212333310293847", 182, LocalDate.now(), LocalDate.now().plusYears(5));
+
+			String mikaCardHolder = client2.getFirstName() + " " + client2.getLastName();
+			Card mikaSilverCredit = new Card(mikaCardHolder, CardType.CREDIT, CardColor.SILVER, "9201837475660101", 555, LocalDate.now(), LocalDate.now().plusYears(4));
 
 
+			cardRepository.save(melbaGoldDebit);
+			cardRepository.save(melbaTitaniumCredit);
+			cardRepository.save(mikaSilverCredit);
 
 		});
 	}

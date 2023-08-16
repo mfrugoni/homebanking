@@ -89,6 +89,12 @@ public class Client {
         clientLoan.setClient(this);
         clientLoans.add(clientLoan);
     }
+
+    public void addCard(Card card){
+        card.setClient(this);
+        cards.add(card);
+    }
+
     @JsonIgnore
     public List<Loan> getLoans(){
         return clientLoans.stream().map(clientLoan -> clientLoan.getLoan()).collect(toList());

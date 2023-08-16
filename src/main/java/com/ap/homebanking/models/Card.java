@@ -80,7 +80,7 @@ public class Card {
         return cvv;
     }
 
-    public void setCvv(short cvv) {
+    public void setCvv(int cvv) {
         this.cvv = cvv;
     }
 
@@ -98,5 +98,13 @@ public class Card {
 
     public void setThruDate(LocalDate thruDate) {
         this.thruDate = thruDate;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }
