@@ -33,4 +33,36 @@ public class CardDTO {
 
         this.thruDate = card.getThruDate();
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getCardHolder() {
+        return cardHolder;
+    }
+
+    public CardType getType() {
+        return type;
+    }
+
+    public CardColor getColor() {
+        return color;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public int getCvv() {
+        return cvv;
+    }
+
+    public LocalDate getFromDate() {
+        return fromDate;
+    }
+
+    public LocalDate getThruDate() {
+        return thruDate;
+    }
 }
