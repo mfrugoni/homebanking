@@ -95,7 +95,7 @@ public class HomebankingApplication {
 			clientLoanRepository.save(mikaLoanAuto);
 
 			String melbaCardHolder = client1.getFirstName() + " " + client1.getLastName();
-			//Card melbaGoldDebit = new Card(melbaCardHolder, CardType.DEBIT, CardColor.GOLD, 5555666677778888, 773, LocalDate.now(), LocalDate.now().plusYears(5));
+			Card melbaGoldDebit = new Card(melbaCardHolder, CardType.DEBIT, CardColor.GOLD, "5555666677778888", 773, LocalDate.now(), LocalDate.now().plusYears(5));
 
 
 
