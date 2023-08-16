@@ -107,6 +107,9 @@ public class HomebankingApplication {
 			String mikaCardHolder = client2.getFirstName() + " " + client2.getLastName();
 			Card mikaSilverCredit = new Card(mikaCardHolder, CardType.CREDIT, CardColor.SILVER, "9201837475660101", 555, LocalDate.now(), LocalDate.now().plusYears(4));
 
+			client1.addCard(melbaGoldDebit);
+			client1.addCard(melbaTitaniumCredit);
+			client2.addCard(mikaSilverCredit);
 
 			cardRepository.save(melbaGoldDebit);
 			cardRepository.save(melbaTitaniumCredit);
