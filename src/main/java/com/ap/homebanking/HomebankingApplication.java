@@ -28,7 +28,7 @@ public class HomebankingApplication {
 		return (args -> {
 
 			//Melba Morel Data:
-			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com");
+			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com", "melba");
 
 			LocalDate today = LocalDate.now();
 			Account account1 = new Account("VIN001", today, 5000);
@@ -59,7 +59,7 @@ public class HomebankingApplication {
 			transactionRepository.save(trans4);
 
 			//Mika Schiffrin Data:
-			Client client2 = new Client("Mikaela", "Schiffrin", "mika@email.com");
+			Client client2 = new Client("Mikaela", "Schiffrin", "mika@email.com", "mika");
 
 			Account account3 = new Account("AA12", today, 12300);
 
