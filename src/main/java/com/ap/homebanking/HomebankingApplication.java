@@ -120,7 +120,7 @@ public class HomebankingApplication {
 			cardRepository.save(melbaTitaniumCredit);
 			cardRepository.save(mikaSilverCredit);
 
-			Client clientAdmin = new Client("admin", "admin", "admin@admin.com", "admin");
+			Client clientAdmin = new Client("admin", "admin", "admin@admin.com", passwordEncoder.encode("admin"));
 			clientRepository.save(clientAdmin);
 
 		});

@@ -1,6 +1,7 @@
 package com.ap.homebanking.configurations;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -19,12 +20,17 @@ public class WebAuthorization extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
+                .antMatchers("/web/index.html", "/web/css/style.css", "/web/js/index.js", "/web/img/**").permitAll()
 
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .antMatchers("/manager.html").hasAuthority("ADMIN")
                 .antMatchers("/rest/**").hasAuthority("ADMIN")
-                .antMatchers("/h2-console").hasAuthority("ADMIN")
+                .antMatchers("/h2-console/**").hasAuthority("ADMIN")
 
-                .antMatchers("/**").hasAuthority("CLIENT");
+//                .antMatchers("/**").hasAnyAuthority("CLIENT", "ADMIN")
+                .antMatchers("/**").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.POST, "/api/login", "/api/logout").permitAll();
+
 
 
         http.formLogin()
