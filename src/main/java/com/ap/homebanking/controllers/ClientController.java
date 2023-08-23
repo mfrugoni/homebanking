@@ -52,7 +52,7 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping("/current")
+    @RequestMapping("/clients/current")
     public ClientDTO getCurrentClient(Authentication authentication){
 
         Client authenticated = clientRepository.findByEmail(authentication.getName());
