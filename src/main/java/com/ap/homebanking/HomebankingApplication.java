@@ -79,7 +79,7 @@ public class HomebankingApplication {
 			transactionRepository.save(trans5);
 			transactionRepository.save(trans6);
 
-
+ 			//Loans data:
 			Loan loanHipotecario = new Loan("Hipotecario", 500000, List.of(12, 24, 36, 48, 60));
 			Loan loanPersonal = new Loan("Personal", 100000, List.of(6, 12, 24));
 			Loan loanAutomotriz = new Loan("Automotriz", 300000, List.of(6, 12, 24, 36));
@@ -88,23 +88,28 @@ public class HomebankingApplication {
 			loanRepository.save(loanPersonal);
 			loanRepository.save(loanAutomotriz);
 
-			ClientLoan melbaLoanHipotecario = new ClientLoan(400000, 60, client1, loanHipotecario);
-			ClientLoan melbaLoanPersonal = new ClientLoan(50000, 12, client1, loanPersonal);
+			ClientLoan melbaLoanHipotecario = new ClientLoan(400000, 60);
+			ClientLoan melbaLoanPersonal = new ClientLoan(50000, 12);
 
-			ClientLoan mikaLoanPersonal = new ClientLoan(100000, 24, client2, loanPersonal);
-			ClientLoan mikaLoanAuto = new ClientLoan(200000, 36, client2, loanAutomotriz);
+			ClientLoan mikaLoanPersonal = new ClientLoan(100000, 24);
+			ClientLoan mikaLoanAuto = new ClientLoan(200000, 36);
 
 			client1.addClientLoan(melbaLoanHipotecario);
 			client1.addClientLoan(melbaLoanPersonal);
+			loanHipotecario.addClientLoan(melbaLoanHipotecario);
+			loanPersonal.addClientLoan(melbaLoanPersonal);
 
 			client2.addClientLoan(mikaLoanPersonal);
 			client2.addClientLoan(mikaLoanAuto);
+			loanPersonal.addClientLoan(mikaLoanPersonal);
+			loanAutomotriz.addClientLoan(mikaLoanAuto);
 
 			clientLoanRepository.save(melbaLoanHipotecario);
 			clientLoanRepository.save(melbaLoanPersonal);
 			clientLoanRepository.save(mikaLoanPersonal);
 			clientLoanRepository.save(mikaLoanAuto);
 
+			//Cards data:
 			String melbaCardHolder = client1.getFirstName() + " " + client1.getLastName();
 			Card melbaGoldDebit = new Card(melbaCardHolder, CardType.DEBIT, CardColor.GOLD, "5555666677778888", 773, LocalDate.now(), LocalDate.now().plusYears(5));
 			Card melbaTitaniumCredit = new Card(melbaCardHolder, CardType.CREDIT, CardColor.TITANIUM, "1212333310293847", 182, LocalDate.now(), LocalDate.now().plusYears(5));
@@ -120,6 +125,7 @@ public class HomebankingApplication {
 			cardRepository.save(melbaTitaniumCredit);
 			cardRepository.save(mikaSilverCredit);
 
+			//Admin data (auth):
 			Client clientAdmin = new Client("admin", "admin", "admin@admin.com", passwordEncoder.encode("admin"));
 			clientRepository.save(clientAdmin);
 
