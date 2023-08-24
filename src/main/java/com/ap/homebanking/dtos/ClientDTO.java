@@ -22,19 +22,12 @@ public class ClientDTO {
 
     public ClientDTO(Client client){
         this.id = client.getId();
-
         this.firstName = client.getFirstName();
-
         this.lastName = client.getLastName();
-
         this.email = client.getEmail();
-
         this.accounts = client.getAccounts().stream().map(account -> new AccountDTO(account)).collect(toSet());
-
         this.loans = client.getClientLoans().stream().map(loan -> new ClientLoanDTO(loan)).collect(toSet());
-
         this.cards = client.getCards().stream().map(card -> new CardDTO(card)).collect(toSet());
-
     }
 
     public long getId() {

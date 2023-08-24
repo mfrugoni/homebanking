@@ -14,13 +14,9 @@ public class TransactionDTO {
 
     public TransactionDTO(Transaction transaction){
         this.id = transaction.getId();
-
         this.type = transaction.getType();
-
         this.amount = transaction.getAmount();
-
         this.description = transaction.getDescription();
-
         this.date = transaction.getDate();
     }
 
