@@ -30,9 +30,6 @@ public class AccountController {
     @Autowired
     private ClientRepository clientRepository;
 
-    @Autowired
-    private Authentication authentication;
-
     @RequestMapping("/accounts")
     public List<AccountDTO> getAccounts(){
         return accountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(toList());
@@ -44,7 +41,7 @@ public class AccountController {
     }
 
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
-    public ResponseEntity<Object> createAccount(){
+    public ResponseEntity<Object> createAccount(Authentication authentication){
         Client authenticated = clientRepository.findByEmail(authentication.getName());
 
         Set<Account> totalAccounts = new HashSet<>();
@@ -54,8 +51,8 @@ public class AccountController {
             return new ResponseEntity<>("You can´t own more than three accounts", HttpStatus.FORBIDDEN);
 
         else {
-            Double number = getRandomNumber(0, 99999999);
-            String accountNumber = "VIN-" + number.toString();
+            Integer number = getRandomNumber(0, 99999999);
+            String accountNumber = "VIN-" + number;
 
             Account account = new Account(accountNumber, LocalDate.now(), 0 );
             authenticated.addAccount(account);
@@ -64,8 +61,8 @@ public class AccountController {
         }
     }
 
-    public double getRandomNumber(double min, double max){
-        return ((Math.random() * (max - min)) + min);
+    public int getRandomNumber(int min, int max){
+        return (int) ((Math.random() * (max - min)) + min);
     }
 
 }
