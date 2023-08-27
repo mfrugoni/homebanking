@@ -1,7 +1,9 @@
 package com.ap.homebanking.controllers;
 
 import com.ap.homebanking.dtos.ClientDTO;
+import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
+import com.ap.homebanking.repositories.AccountRepository;
 import com.ap.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -19,6 +22,9 @@ import static java.util.stream.Collectors.toList;
 public class ClientController {
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -40,16 +46,33 @@ public class ClientController {
             @RequestParam String email,
             @RequestParam String password
     ){
-        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()){
-            return new ResponseEntity<>("Missing value", HttpStatus.FORBIDDEN);
+        if (firstName.isEmpty()){
+            return new ResponseEntity<>("Missing value: enter your first name", HttpStatus.FORBIDDEN);
+        }
+        if (lastName.isEmpty()){
+            return new ResponseEntity<>("Missing value: enter your last name", HttpStatus.FORBIDDEN);
+        }
+        if (email.isEmpty()){
+            return new ResponseEntity<>("Missing value: enter your email", HttpStatus.FORBIDDEN);
+        }
+        if (password.isEmpty()){
+            return new ResponseEntity<>("Missing value: enter your password", HttpStatus.FORBIDDEN);
         }
 
         if (clientRepository.findByEmail(email) != null){
             return new ResponseEntity<>("email already in use", HttpStatus.FORBIDDEN);
         }
 
-        clientRepository.save(new Client(firstName, lastName, email, passwordEncoder.encode(password)));
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        Client client = new Client(firstName, lastName, email, passwordEncoder.encode(password));
+        clientRepository.save(client);
+
+        Integer number = getRandomNumber(0, 99999999);
+        String accountNumber = "VIN-" + number;
+        Account account = new Account(accountNumber, LocalDate.now(), 0);
+        client.addAccount(account);
+        accountRepository.save(account);
+
+        return new ResponseEntity<>(new ClientDTO(client), HttpStatus.CREATED);
     }
 
     @RequestMapping("/clients/current")
@@ -59,6 +82,10 @@ public class ClientController {
 
         return new ClientDTO(authenticated);
 
+    }
+
+    public int getRandomNumber(int min, int max){
+        return (int) ((Math.random() * (max - min)) + min);
     }
 
 }
