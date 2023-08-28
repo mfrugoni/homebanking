@@ -36,8 +36,8 @@ public class CardController {
 
     @RequestMapping(value = "/clients/current/cards", method = RequestMethod.POST)
     public ResponseEntity<Object> createCard(
-            @RequestParam CardColor color,
-            @RequestParam CardType type,
+            @RequestParam CardColor cardColor,
+            @RequestParam CardType cardType,
             Authentication authentication){
 
         Client authenticated = clientRepository.findByEmail(authentication.getName());
@@ -71,7 +71,7 @@ public class CardController {
 
         String cvv = createCvv();
 
-        Card createdCard = new Card(cardHolder, type, color, cardNumber, cvv, fromDate, thruDate);
+        Card createdCard = new Card(cardHolder, cardType, cardColor, cardNumber, cvv, fromDate, thruDate);
         authenticated.addCard(createdCard);
         cardRepository.save(createdCard);
 
