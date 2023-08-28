@@ -61,6 +61,12 @@ public class AccountController {
         }
     }
 
+    @RequestMapping("/clients/current/accounts")
+    public List<AccountDTO> getAccounts(Authentication authentication){
+        Client authenticated = clientRepository.findByEmail(authentication.getName());
+        return authenticated.getAccounts().stream().map(account -> new AccountDTO(account)).collect(toList());
+    }
+
     public int getRandomNumber(int min, int max){
         return (int) ((Math.random() * (max - min)) + min);
     }

@@ -1,5 +1,6 @@
 package com.ap.homebanking.controllers;
 
+import com.ap.homebanking.dtos.AccountDTO;
 import com.ap.homebanking.dtos.CardDTO;
 import com.ap.homebanking.models.Card;
 import com.ap.homebanking.models.CardColor;
@@ -22,6 +23,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/api")
@@ -74,6 +77,12 @@ public class CardController {
 
         return new ResponseEntity<>(new CardDTO(createdCard), HttpStatus.CREATED);
 
+    }
+
+    @RequestMapping("/clients/current/cards")
+    public List<CardDTO> getCards(Authentication authentication){
+        Client authenticated = clientRepository.findByEmail(authentication.getName());
+        return authenticated.getCards().stream().map(card -> new CardDTO(card)).collect(toList());
     }
 
     public int getRandomNumber(int min, int max){
