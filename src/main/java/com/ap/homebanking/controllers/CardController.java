@@ -47,10 +47,10 @@ public class CardController {
         creditCards = totalCards.stream().filter(card -> card.getType() == CardType.CREDIT).collect(Collectors.toList());
 
         if (debitCards.size() >= 3)
-            return new ResponseEntity<>("You are not allowed to have more than three debit cards", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("You are not allowed to own more than three debit cards", HttpStatus.FORBIDDEN);
 
         if (creditCards.size() >= 3)
-            return new ResponseEntity<>("You are not allowed to have more than three credit cards", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("You are not allowed to own more than three credit cards", HttpStatus.FORBIDDEN);
 
         int cvv = getRandomNumber(000, 999);
 
