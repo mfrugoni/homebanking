@@ -1,5 +1,6 @@
 package com.ap.homebanking.controllers;
 
+import com.ap.homebanking.dtos.CardDTO;
 import com.ap.homebanking.models.Card;
 import com.ap.homebanking.models.CardColor;
 import com.ap.homebanking.models.CardType;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -52,8 +54,25 @@ public class CardController {
         if (creditCards.size() >= 3)
             return new ResponseEntity<>("You are not allowed to own more than three credit cards", HttpStatus.FORBIDDEN);
 
-        int cvv = getRandomNumber(000, 999);
+        String cardHolder = authenticated.getFirstName() + " " + authenticated.getLastName();
 
+        String firstSection = createNumberSection();
+        String secondSection = createNumberSection();
+        String thirdSection = createNumberSection();
+        String fourthSection = createNumberSection();
+        String cardNumber = firstSection + " " + secondSection + " " + thirdSection + " " + fourthSection;
+
+        LocalDate fromDate = LocalDate.now();
+
+        LocalDate thruDate = LocalDate.now().plusYears(5);
+
+        String cvv = createCvv();
+
+        Card createdCard = new Card(cardHolder, type, color, cardNumber, cvv, fromDate, thruDate);
+        authenticated.addCard(createdCard);
+        cardRepository.save(createdCard);
+
+        return new ResponseEntity<>(new CardDTO(createdCard), HttpStatus.CREATED);
 
     }
 
@@ -61,5 +80,37 @@ public class CardController {
         return (int) ((Math.random() * (max - min)) + min);
     }
 
+    public String createCvv(){
+        Integer randomNumber = getRandomNumber(0, 999);
+
+        if (randomNumber < 100 && randomNumber > 10)
+            return "0" + randomNumber;
+        if (randomNumber < 10)
+            return "00" + randomNumber;
+        else
+            return randomNumber.toString();
+
+    }
+
+    public String createNumberSection(){
+        Integer numberSection = getRandomNumber(0, 9999);
+        String section;
+
+        if (numberSection < 1000 && numberSection > 99){
+            section = "0" + numberSection;
+            return section;
+        }
+        if (numberSection < 100 && numberSection > 9){
+            section = "00" + numberSection;
+            return section;
+        }
+
+        if (numberSection < 10){
+            section = "000" + numberSection;
+            return section;
+        }
+        else
+            return numberSection.toString();
+    }
 
 }
