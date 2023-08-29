@@ -46,16 +46,48 @@ public class CardController {
         totalCards = authenticated.getCards();
 
         List<Card> debitCards = new ArrayList<>();
-        debitCards = totalCards.stream().filter(card -> card.getType() == CardType.DEBIT).collect(Collectors.toList());
+        debitCards = totalCards.stream().filter(card -> card.getType().equals(CardType.DEBIT)).collect(Collectors.toList());
 
         List<Card> creditCards = new ArrayList<>();
-        creditCards = totalCards.stream().filter(card -> card.getType() == CardType.CREDIT).collect(Collectors.toList());
+        creditCards = totalCards.stream().filter(card -> card.getType().equals(CardType.CREDIT)).collect(Collectors.toList());
 
-        if (debitCards.size() >= 3)
-            return new ResponseEntity<>("You are not allowed to own more than three debit cards", HttpStatus.FORBIDDEN);
+        //Cards Validations:
+        long goldDebitCards = debitCards.stream().filter(card -> card.getColor().equals(CardColor.GOLD)).count();
+        long silverDebitCards = debitCards.stream().filter(card -> card.getColor().equals(CardColor.SILVER)).count();
+        long titaniumDebitCards = debitCards.stream().filter(card -> card.getColor().equals(CardColor.TITANIUM)).count();
 
-        if (creditCards.size() >= 3)
-            return new ResponseEntity<>("You are not allowed to own more than three credit cards", HttpStatus.FORBIDDEN);
+        long goldCreditCards = creditCards.stream().filter(card -> card.getColor().equals(CardColor.GOLD)).count();
+        long silverCreditCards = creditCards.stream().filter(card -> card.getColor().equals(CardColor.SILVER)).count();
+        long titaniumCreditCards = creditCards.stream().filter(card -> card.getColor().equals(CardColor.TITANIUM)).count();
+
+
+        if (cardType.equals(CardType.DEBIT)){
+            if (debitCards.size() >= 3)
+                return new ResponseEntity<>("You are not allowed to own more than three debit cards", HttpStatus.FORBIDDEN);
+
+            if (cardColor.equals(CardColor.GOLD) && goldDebitCards > 0)
+                return new ResponseEntity<>("Choose another card color", HttpStatus.FORBIDDEN);
+
+            if (cardColor.equals(CardColor.SILVER) && silverDebitCards > 0)
+                return new ResponseEntity<>("Choose another card color", HttpStatus.FORBIDDEN);
+
+            if (cardColor.equals(CardColor.TITANIUM) && titaniumDebitCards > 0)
+                return new ResponseEntity<>("Choose another card color", HttpStatus.FORBIDDEN);
+        }
+
+        if (cardType.equals(CardType.CREDIT)){
+            if (creditCards.size() >= 3)
+                return new ResponseEntity<>("You are not allowed to own more than three credit cards", HttpStatus.FORBIDDEN);
+
+            if (cardColor.equals(CardColor.GOLD) && goldCreditCards > 0)
+                return new ResponseEntity<>("Choose another card color", HttpStatus.FORBIDDEN);
+
+            if (cardColor.equals(CardColor.SILVER) && silverCreditCards > 0)
+                return new ResponseEntity<>("Choose another card color", HttpStatus.FORBIDDEN);
+
+            if (cardColor.equals(CardColor.TITANIUM) && titaniumCreditCards > 0)
+                return new ResponseEntity<>("Choose another card color", HttpStatus.FORBIDDEN);
+        }
 
         String cardHolder = authenticated.getFirstName() + " " + authenticated.getLastName();
 
