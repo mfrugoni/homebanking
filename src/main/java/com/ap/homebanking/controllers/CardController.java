@@ -89,13 +89,10 @@ public class CardController {
                 return new ResponseEntity<>("Choose another card color", HttpStatus.FORBIDDEN);
         }
 
+        //Create arguments for cards:
         String cardHolder = authenticated.getFirstName() + " " + authenticated.getLastName();
 
-        String firstSection = createNumberSection();
-        String secondSection = createNumberSection();
-        String thirdSection = createNumberSection();
-        String fourthSection = createNumberSection();
-        String cardNumber = firstSection + " " + secondSection + " " + thirdSection + " " + fourthSection;
+        String cardNumber = createCardNumber();
 
         LocalDate fromDate = LocalDate.now();
 
@@ -103,6 +100,7 @@ public class CardController {
 
         String cvv = createCvv();
 
+        //Create card and add it to client and card table:
         Card createdCard = new Card(cardHolder, cardType, cardColor, cardNumber, cvv, fromDate, thruDate);
         authenticated.addCard(createdCard);
         cardRepository.save(createdCard);
@@ -117,6 +115,7 @@ public class CardController {
         return authenticated.getCards().stream().map(card -> new CardDTO(card)).collect(toList());
     }
 
+    //Methods to create necessary arguments for cards  creation:
     public int getRandomNumber(int min, int max){
         return (int) ((Math.random() * (max - min)) + min);
     }
@@ -152,6 +151,19 @@ public class CardController {
         }
         else
             return numberSection.toString();
+    }
+
+    public String createCardNumber(){
+        String cardNumber = createNumberSection();
+        int i = 0;
+        String section;
+
+        while (i < 3){
+            section = createNumberSection();
+            cardNumber = cardNumber.concat(" ").concat(section);
+            i++;
+        }
+        return cardNumber;
     }
 
 }
