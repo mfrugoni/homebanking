@@ -67,6 +67,10 @@ public class TransactionController {
         if (!authenticated.getAccounts().contains(accountFrom))
             return new ResponseEntity<>("Origin account doesn't belong to the auth client", HttpStatus.FORBIDDEN);
 
+        //Validate if there's enough money to make the transaction:
+        if (amount > accountFrom.getBalance())
+            return new ResponseEntity<>("Balance is less than the amount to transfer", HttpStatus.FORBIDDEN);
+
 
 //        Set<Account> fromAccounts = new HashSet<>();
 //        fromAccounts = authenticated.getAccounts();
