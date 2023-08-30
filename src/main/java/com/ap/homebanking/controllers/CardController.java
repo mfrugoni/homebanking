@@ -42,14 +42,11 @@ public class CardController {
 
         Client authenticated = clientRepository.findByEmail(authentication.getName());
 
-        Set<Card> totalCards = new HashSet<>();
-        totalCards = authenticated.getCards();
+        Set<Card> totalCards = authenticated.getCards();
 
-        List<Card> debitCards = new ArrayList<>();
-        debitCards = totalCards.stream().filter(card -> card.getType().equals(CardType.DEBIT)).collect(Collectors.toList());
+        List<Card> debitCards = totalCards.stream().filter(card -> card.getType().equals(CardType.DEBIT)).collect(Collectors.toList());
 
-        List<Card> creditCards = new ArrayList<>();
-        creditCards = totalCards.stream().filter(card -> card.getType().equals(CardType.CREDIT)).collect(Collectors.toList());
+        List<Card> creditCards = totalCards.stream().filter(card -> card.getType().equals(CardType.CREDIT)).collect(Collectors.toList());
 
         //Cards Validations:
         long goldDebitCards = debitCards.stream().filter(card -> card.getColor().equals(CardColor.GOLD)).count();
