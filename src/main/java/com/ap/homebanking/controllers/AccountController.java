@@ -36,8 +36,22 @@ public class AccountController {
     }
 
     @RequestMapping("/accounts/{id}")
-    public AccountDTO getAccount(@PathVariable Long id){
-        return accountRepository.findById(id).map(account -> new AccountDTO(account)).orElse(null);
+    public ResponseEntity<Object> getAccount(@PathVariable Long id, Authentication authentication){
+        Client authenticated = clientRepository.findByEmail(authentication.getName());
+        Account account = accountRepository.findById(id).orElse(null);
+
+        if (account != null){
+            if (authenticated.getAccounts().contains(account)){
+                return new ResponseEntity<>(new AccountDTO(account), HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>("This account doesn't belong to the authenticated client", HttpStatus.FORBIDDEN);
+            }
+        }
+        else {
+            return new ResponseEntity<>("This account doesn't exist", HttpStatus.FORBIDDEN);
+        }
+
     }
 
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
