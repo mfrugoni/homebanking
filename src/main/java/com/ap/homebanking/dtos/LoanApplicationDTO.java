@@ -1,12 +1,12 @@
 package com.ap.homebanking.dtos;
 
 public class LoanApplicationDTO {
-private int loanId;
+private long loanId;
 private double amount;
 private int payments;
 private String toAccountNumber;
 
-    public int getLoanId() {
+    public long getLoanId() {
         return loanId;
     }
 

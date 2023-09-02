@@ -53,6 +53,17 @@ public class LoanController {
         if (loanApplicationDTO.getToAccountNumber().isEmpty())
             return new ResponseEntity<>("Enter an account number", HttpStatus.FORBIDDEN);
 
+        if (!loanRepository.existsById(loanApplicationDTO.getLoanId()))
+            return new ResponseEntity<>("That kind of loan does not exist", HttpStatus.FORBIDDEN);
+
+        if (loanRepository.existsById(loanApplicationDTO.getLoanId())){
+            if (loanApplicationDTO.getAmount() > loanRepository.getReferenceById(loanApplicationDTO.getLoanId()).getMaxAmount())
+                return new ResponseEntity<>("The amount required is higher than the top amount for this loan", HttpStatus.FORBIDDEN);
+        }
+
+
+       // if (loanApplicationDTO.getAmount() > loanRepository.findById(loanApplicationDTO.getLoanId()))
+
 
 
 
