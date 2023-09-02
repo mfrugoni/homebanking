@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.ap.homebanking.utils.Util.getRandomNumber;
 import static java.util.stream.Collectors.toList;
 
 @RestController
@@ -79,10 +80,6 @@ public class AccountController {
     public List<AccountDTO> getAccounts(Authentication authentication){
         Client authenticated = clientRepository.findByEmail(authentication.getName());
         return authenticated.getAccounts().stream().map(account -> new AccountDTO(account)).collect(toList());
-    }
-
-    public int getRandomNumber(int min, int max){
-        return (int) ((Math.random() * (max - min)) + min);
     }
 
 }
