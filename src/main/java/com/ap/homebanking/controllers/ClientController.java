@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.ap.homebanking.utils.Util.getRandomNumber;
 import static java.util.stream.Collectors.toList;
 
 @RestController
@@ -82,10 +83,6 @@ public class ClientController {
 
         return new ClientDTO(authenticated);
 
-    }
-
-    public int getRandomNumber(int min, int max){
-        return (int) ((Math.random() * (max - min)) + min);
     }
 
 }
