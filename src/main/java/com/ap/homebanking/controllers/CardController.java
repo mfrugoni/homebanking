@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.ap.homebanking.utils.Util.getRandomNumber;
 import static java.util.stream.Collectors.toList;
 
 @RestController
@@ -113,9 +114,6 @@ public class CardController {
     }
 
     //Methods to create necessary arguments for cards  creation:
-    public int getRandomNumber(int min, int max){
-        return (int) ((Math.random() * (max - min)) + min);
-    }
 
     public String createCvv(){
         Integer randomNumber = getRandomNumber(0, 999);
