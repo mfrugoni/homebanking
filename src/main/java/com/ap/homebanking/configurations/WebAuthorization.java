@@ -27,12 +27,13 @@ public class WebAuthorization extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/clients/current").hasAuthority("CLIENT")
                 .antMatchers("/api/clients/current/accounts").hasAuthority("CLIENT")
                 .antMatchers("/api/clients/current/cards").hasAuthority("CLIENT")
+                .antMatchers("/api/transactions").hasAuthority("CLIENT")
 
                 .antMatchers("/manager.html", "/manager.js").hasAuthority("ADMIN")
                 .antMatchers("/rest/**").hasAuthority("ADMIN")
                 .antMatchers("/h2-console/**").hasAuthority("ADMIN")
-                .antMatchers("/api/clients/{id}").hasAuthority("ADMIN");
-
+                .antMatchers("/api/clients/{id}").hasAuthority("ADMIN")
+                .antMatchers("/api/clients").hasAuthority("ADMIN");
 
 
         http.formLogin()
