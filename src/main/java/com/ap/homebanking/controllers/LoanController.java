@@ -3,6 +3,7 @@ package com.ap.homebanking.controllers;
 import com.ap.homebanking.dtos.LoanApplicationDTO;
 import com.ap.homebanking.dtos.LoanDTO;
 import com.ap.homebanking.models.Client;
+import com.ap.homebanking.repositories.AccountRepository;
 import com.ap.homebanking.repositories.ClientRepository;
 import com.ap.homebanking.repositories.LoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class LoanController {
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @RequestMapping("/loans")
     public List<LoanDTO> getLoans(){
@@ -60,7 +64,14 @@ public class LoanController {
             if (loanApplicationDTO.getAmount() > loanRepository.getReferenceById(loanApplicationDTO.getLoanId()).getMaxAmount())
                 return new ResponseEntity<>("The amount required is higher than the top amount for this loan", HttpStatus.FORBIDDEN);
         }
+        if (!loanRepository.getReferenceById(loanApplicationDTO.getLoanId()).getPayments().contains(loanApplicationDTO.getPayments()))
+            return new ResponseEntity<>("The amount of payments is not available for this kind of loan", HttpStatus.FORBIDDEN);
 
+        if (accountRepository.findByNumber(loanApplicationDTO.getToAccountNumber()) == null)
+            return new ResponseEntity<>("This account doesn't exist", HttpStatus.FORBIDDEN);
+
+        if (!authenticated.getAccounts().contains(accountRepository.findByNumber(loanApplicationDTO.getToAccountNumber())))
+            return new ResponseEntity<>("This account doesn't belong to the authenticated client", HttpStatus.FORBIDDEN);
 
        // if (loanApplicationDTO.getAmount() > loanRepository.findById(loanApplicationDTO.getLoanId()))
 
