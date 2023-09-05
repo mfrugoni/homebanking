@@ -2,10 +2,8 @@ package com.ap.homebanking.controllers;
 
 import com.ap.homebanking.dtos.LoanApplicationDTO;
 import com.ap.homebanking.dtos.LoanDTO;
-import com.ap.homebanking.models.Client;
-import com.ap.homebanking.repositories.AccountRepository;
-import com.ap.homebanking.repositories.ClientRepository;
-import com.ap.homebanking.repositories.LoanRepository;
+import com.ap.homebanking.models.*;
+import com.ap.homebanking.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/api")
@@ -32,16 +34,22 @@ public class LoanController {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private ClientLoanRepository clientLoanRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
     @RequestMapping("/loans")
     public List<LoanDTO> getLoans(){
-        return loanRepository.findAll().stream().map(loan -> new LoanDTO(loan)).collect(Collectors.toList());
+        return loanRepository.findAll().stream().map(loan -> new LoanDTO(loan)).collect(toList());
     }
 
     @RequestMapping(path = "/loans", method = RequestMethod.POST)
     @Transactional
     public ResponseEntity<Object> createLoan(
             @RequestBody LoanApplicationDTO loanApplicationDTO,
-            Authentication authentication){
+            Authentication authentication) {
 
         Client authenticated = clientRepository.findByEmail(authentication.getName());
 
@@ -60,7 +68,10 @@ public class LoanController {
         if (!loanRepository.existsById(loanApplicationDTO.getLoanId()))
             return new ResponseEntity<>("That kind of loan does not exist", HttpStatus.FORBIDDEN);
 
-        if (loanRepository.existsById(loanApplicationDTO.getLoanId())){
+    //    Option of checking to max amount:
+    //    if (loanApplicationDTO.getAmount() > Objects.requireNonNull(loanRepository.findById(loanApplicationDTO.getLoanId()).orElse(null)).getMaxAmount())
+
+        if (loanRepository.existsById(loanApplicationDTO.getLoanId())) {
             if (loanApplicationDTO.getAmount() > loanRepository.getReferenceById(loanApplicationDTO.getLoanId()).getMaxAmount())
                 return new ResponseEntity<>("The amount required is higher than the top amount for this loan", HttpStatus.FORBIDDEN);
         }
@@ -73,13 +84,29 @@ public class LoanController {
         if (!authenticated.getAccounts().contains(accountRepository.findByNumber(loanApplicationDTO.getToAccountNumber())))
             return new ResponseEntity<>("This account doesn't belong to the authenticated client", HttpStatus.FORBIDDEN);
 
-       // if (loanApplicationDTO.getAmount() > loanRepository.findById(loanApplicationDTO.getLoanId()))
 
+        double amountPlusTwenty = loanApplicationDTO.getAmount() * 1.2;
+        ClientLoan clientLoan = new ClientLoan(amountPlusTwenty, loanApplicationDTO.getPayments());
 
+        authenticated.addClientLoan(clientLoan);
 
+        if (loanRepository.existsById(loanApplicationDTO.getLoanId()))
+            loanRepository.getReferenceById(loanApplicationDTO.getLoanId()).addClientLoan(clientLoan);
 
+        clientLoanRepository.save(clientLoan);
+        clientRepository.save(authenticated);
 
-        return new ResponseEntity<>("", HttpStatus.CREATED);
+        String loanName = loanRepository.getReferenceById(loanApplicationDTO.getLoanId()).getName();
+        Transaction addLoan = new Transaction(TransactionType.CREDIT, loanApplicationDTO.getAmount(), loanName + " loan approved", LocalDateTime.now());
+
+        Account destinationAccount = accountRepository.findByNumber(loanApplicationDTO.getToAccountNumber());
+        destinationAccount.addTransaction(addLoan);
+        transactionRepository.save(addLoan);
+
+        destinationAccount.setBalance(destinationAccount.getBalance() + loanApplicationDTO.getAmount());
+        accountRepository.save(destinationAccount);
+
+        return new ResponseEntity<>("Loan application approved", HttpStatus.CREATED);
 
     }
 
