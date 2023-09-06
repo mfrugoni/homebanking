@@ -53,6 +53,7 @@ public class LoanController {
 
         Client authenticated = clientRepository.findByEmail(authentication.getName());
 
+        //Params validations:
         if (loanApplicationDTO.getLoanId() <= 0)
             return new ResponseEntity<>("Enter a valid ID", HttpStatus.FORBIDDEN);
 
@@ -85,9 +86,11 @@ public class LoanController {
             return new ResponseEntity<>("This account doesn't belong to the authenticated client", HttpStatus.FORBIDDEN);
 
 
+        //Apply for loan:
         double amountPlusTwenty = loanApplicationDTO.getAmount() * 1.2;
         ClientLoan clientLoan = new ClientLoan(amountPlusTwenty, loanApplicationDTO.getPayments());
 
+        //Bind ClientLoan to client and to loan:
         authenticated.addClientLoan(clientLoan);
 
         if (loanRepository.existsById(loanApplicationDTO.getLoanId()))
@@ -96,13 +99,15 @@ public class LoanController {
         clientLoanRepository.save(clientLoan);
         clientRepository.save(authenticated);
 
+        //Create transaction:
         String loanName = loanRepository.getReferenceById(loanApplicationDTO.getLoanId()).getName();
-        Transaction addLoan = new Transaction(TransactionType.CREDIT, loanApplicationDTO.getAmount(), loanName + " loan approved", LocalDateTime.now());
+        Transaction addLoan = new Transaction(TransactionType.CREDIT, loanApplicationDTO.getAmount(), loanName + " - loan approved", LocalDateTime.now());
 
         Account destinationAccount = accountRepository.findByNumber(loanApplicationDTO.getToAccountNumber());
         destinationAccount.addTransaction(addLoan);
         transactionRepository.save(addLoan);
 
+        //Modify account balance:
         destinationAccount.setBalance(destinationAccount.getBalance() + loanApplicationDTO.getAmount());
         accountRepository.save(destinationAccount);
 
