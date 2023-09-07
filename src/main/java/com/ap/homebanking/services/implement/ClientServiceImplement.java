@@ -5,11 +5,13 @@ import com.ap.homebanking.models.Client;
 import com.ap.homebanking.repositories.ClientRepository;
 import com.ap.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@Service
 public class ClientServiceImplement implements ClientService {
     @Autowired
     private ClientRepository clientRepository;
