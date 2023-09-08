@@ -7,6 +7,9 @@ import com.ap.homebanking.models.TransactionType;
 import com.ap.homebanking.repositories.AccountRepository;
 import com.ap.homebanking.repositories.ClientRepository;
 import com.ap.homebanking.repositories.TransactionRepository;
+import com.ap.homebanking.services.AccountService;
+import com.ap.homebanking.services.ClientService;
+import com.ap.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,12 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api")
 public class TransactionController {
+    @Autowired
+    private ClientService clientService;
+    @Autowired
+    private AccountService accountService;
+    @Autowired
+    private TransactionService transactionService;
 
     @Autowired
     private ClientRepository clientRepository;
@@ -57,8 +66,8 @@ public class TransactionController {
             return new ResponseEntity<>("Accounts' numbers can't be the same", HttpStatus.FORBIDDEN);
 
         //Validate if accounts exist:
-        Account accountFrom = accountRepository.findByNumber(fromAccountNumber);
-        Account accountTo = accountRepository.findByNumber(toAccountNumber);
+        Account accountFrom = accountService.findByNumber(fromAccountNumber);
+        Account accountTo = accountService.findByNumber(toAccountNumber);
 
         if (accountFrom == null)
             return new ResponseEntity<>("Origin account doesn't exist", HttpStatus.FORBIDDEN);
@@ -67,7 +76,7 @@ public class TransactionController {
             return new ResponseEntity<>("Destination account doesn't exist", HttpStatus.FORBIDDEN);
 
         //Validate if auth client owns account:
-        Client authenticated = clientRepository.findByEmail(authentication.getName());
+        Client authenticated = clientService.findByEmail(authentication.getName());
 
         if (!authenticated.getAccounts().contains(accountFrom))
             return new ResponseEntity<>("Origin account doesn't belong to the auth client", HttpStatus.FORBIDDEN);
@@ -86,13 +95,13 @@ public class TransactionController {
 
         accountFrom.addTransaction(sendMoney);
         accountTo.addTransaction(getMoney);
-        transactionRepository.save(sendMoney);
-        transactionRepository.save(getMoney);
+        transactionService.save(sendMoney);
+        transactionService.save(getMoney);
 
         accountFrom.setBalance(accountFrom.getBalance() - amount);
         accountTo.setBalance(accountTo.getBalance() + amount);
-        accountRepository.save(accountFrom);
-        accountRepository.save(accountTo);
+        accountService.save(accountFrom);
+        accountService.save(accountTo);
 
         return new ResponseEntity<>("Transaction completed", HttpStatus.CREATED);
     }
