@@ -5,6 +5,7 @@ import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.repositories.AccountRepository;
 import com.ap.homebanking.repositories.ClientRepository;
+import com.ap.homebanking.services.AccountService;
 import com.ap.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,8 @@ import static java.util.stream.Collectors.toList;
 public class ClientController {
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private AccountService accountService;
 
 //    @Autowired
 //    private ClientRepository clientRepository;
@@ -78,7 +81,8 @@ public class ClientController {
         String accountNumber = "VIN-" + number;
         Account account = new Account(accountNumber, LocalDate.now(), 0);
         client.addAccount(account);
-        accountRepository.save(account);
+    //    accountRepository.save(account);
+        accountService.save(account);
 
         return new ResponseEntity<>(new ClientDTO(client), HttpStatus.CREATED);
     }

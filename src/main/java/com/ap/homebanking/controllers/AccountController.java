@@ -5,6 +5,8 @@ import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.repositories.AccountRepository;
 import com.ap.homebanking.repositories.ClientRepository;
+import com.ap.homebanking.services.AccountService;
+import com.ap.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,10 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("/api")
 public class AccountController {
     @Autowired
+    private AccountService accountService;
+    @Autowired
+    private ClientService clientService;
+    @Autowired
     private AccountRepository accountRepository;
 
     @Autowired
@@ -33,13 +39,16 @@ public class AccountController {
 
     @RequestMapping("/accounts")
     public List<AccountDTO> getAccounts(){
-        return accountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(toList());
+    //    return accountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(toList());
+        return accountService.getAccounts();
     }
 
     @RequestMapping("/accounts/{id}")
     public ResponseEntity<Object> getAccount(@PathVariable Long id, Authentication authentication){
-        Client authenticated = clientRepository.findByEmail(authentication.getName());
-        Account account = accountRepository.findById(id).orElse(null);
+    //    Client authenticated = clientRepository.findByEmail(authentication.getName());
+    //    Account account = accountRepository.findById(id).orElse(null);
+        Client authenticated = clientService.findByEmail(authentication.getName());
+        Account account = accountService.findById(id);
 
         if (account != null){
             if (authenticated.getAccounts().contains(account)){
@@ -57,7 +66,8 @@ public class AccountController {
 
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<Object> createAccount(Authentication authentication){
-        Client authenticated = clientRepository.findByEmail(authentication.getName());
+    //    Client authenticated = clientRepository.findByEmail(authentication.getName());
+        Client authenticated = clientService.findByEmail(authentication.getName());
 
         Set<Account> totalAccounts = new HashSet<>();
         totalAccounts = authenticated.getAccounts();
@@ -71,14 +81,16 @@ public class AccountController {
 
             Account account = new Account(accountNumber, LocalDate.now(), 0 );
             authenticated.addAccount(account);
-            accountRepository.save(account);
+        //    accountRepository.save(account);
+            accountService.save(account);
             return new ResponseEntity<>("New account created", HttpStatus.CREATED);
         }
     }
 
     @RequestMapping("/clients/current/accounts")
     public List<AccountDTO> getAccounts(Authentication authentication){
-        Client authenticated = clientRepository.findByEmail(authentication.getName());
+    //    Client authenticated = clientRepository.findByEmail(authentication.getName());
+        Client authenticated = clientService.findByEmail(authentication.getName());
         return authenticated.getAccounts().stream().map(account -> new AccountDTO(account)).collect(toList());
     }
 
