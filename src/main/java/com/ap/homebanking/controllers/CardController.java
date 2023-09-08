@@ -36,10 +36,7 @@ public class CardController {
     private CardService cardService;
     @Autowired
     private ClientService clientService;
-    @Autowired
-    private CardRepository cardRepository;
-    @Autowired
-    private ClientRepository clientRepository;
+
 
     @RequestMapping(value = "/clients/current/cards", method = RequestMethod.POST)
     public ResponseEntity<Object> createCard(

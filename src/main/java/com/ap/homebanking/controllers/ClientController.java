@@ -27,25 +27,16 @@ public class ClientController {
     private ClientService clientService;
     @Autowired
     private AccountService accountService;
-
-//    @Autowired
-//    private ClientRepository clientRepository;
-
-    @Autowired
-    private AccountRepository accountRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @RequestMapping("/clients")
     public List<ClientDTO> getClients(){
-        //return clientRepository.findAll().stream().map(client -> new ClientDTO(client)).collect(toList());
         return clientService.getClients();
     }
 
     @RequestMapping("/clients/{id}")
     public ClientDTO getClient(@PathVariable Long id){
-        //return clientRepository.findById(id).map(client -> new ClientDTO(client)).orElse(null);
         return clientService.getClient(id);
     }
 
@@ -69,7 +60,6 @@ public class ClientController {
             return new ResponseEntity<>("Missing value: enter your password", HttpStatus.FORBIDDEN);
         }
 
-        //if (clientRepository.findByEmail(email) != null){
         if (clientService.findByEmail(email) != null){
             return new ResponseEntity<>("email already in use", HttpStatus.FORBIDDEN);
         }
@@ -81,7 +71,6 @@ public class ClientController {
         String accountNumber = "VIN-" + number;
         Account account = new Account(accountNumber, LocalDate.now(), 0);
         client.addAccount(account);
-    //    accountRepository.save(account);
         accountService.save(account);
 
         return new ResponseEntity<>(new ClientDTO(client), HttpStatus.CREATED);

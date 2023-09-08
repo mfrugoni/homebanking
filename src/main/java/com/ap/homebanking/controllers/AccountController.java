@@ -31,22 +31,15 @@ public class AccountController {
     private AccountService accountService;
     @Autowired
     private ClientService clientService;
-    @Autowired
-    private AccountRepository accountRepository;
 
-    @Autowired
-    private ClientRepository clientRepository;
 
     @RequestMapping("/accounts")
     public List<AccountDTO> getAccounts(){
-    //    return accountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(toList());
         return accountService.getAccounts();
     }
 
     @RequestMapping("/accounts/{id}")
     public ResponseEntity<Object> getAccount(@PathVariable Long id, Authentication authentication){
-    //    Client authenticated = clientRepository.findByEmail(authentication.getName());
-    //    Account account = accountRepository.findById(id).orElse(null);
         Client authenticated = clientService.findByEmail(authentication.getName());
         Account account = accountService.findById(id);
 
@@ -66,7 +59,6 @@ public class AccountController {
 
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<Object> createAccount(Authentication authentication){
-    //    Client authenticated = clientRepository.findByEmail(authentication.getName());
         Client authenticated = clientService.findByEmail(authentication.getName());
 
         Set<Account> totalAccounts = new HashSet<>();
@@ -81,7 +73,6 @@ public class AccountController {
 
             Account account = new Account(accountNumber, LocalDate.now(), 0 );
             authenticated.addAccount(account);
-        //    accountRepository.save(account);
             accountService.save(account);
             return new ResponseEntity<>("New account created", HttpStatus.CREATED);
         }
@@ -89,7 +80,6 @@ public class AccountController {
 
     @RequestMapping("/clients/current/accounts")
     public List<AccountDTO> getAccounts(Authentication authentication){
-    //    Client authenticated = clientRepository.findByEmail(authentication.getName());
         Client authenticated = clientService.findByEmail(authentication.getName());
         return authenticated.getAccounts().stream().map(account -> new AccountDTO(account)).collect(toList());
     }

@@ -34,14 +34,6 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    @Autowired
-    private ClientRepository clientRepository;
-
-    @Autowired
-    private AccountRepository accountRepository;
-
-    @Autowired
-    private TransactionRepository transactionRepository;
 
     @Transactional
     @RequestMapping(value = "/transactions", method = RequestMethod.POST)

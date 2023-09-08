@@ -18,6 +18,7 @@ public class LoanServiceImplement implements LoanService {
     private LoanRepository loanRepository;
     @Autowired
     private ClientLoanRepository clientLoanRepository;
+
     @Override
     public List<LoanDTO> getLoans() {
         return loanRepository.findAll().stream().map(loan -> new LoanDTO(loan)).collect(Collectors.toList());
