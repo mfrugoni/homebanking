@@ -8,6 +8,8 @@ import com.ap.homebanking.models.CardType;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.repositories.CardRepository;
 import com.ap.homebanking.repositories.ClientRepository;
+import com.ap.homebanking.services.CardService;
+import com.ap.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,10 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("/api")
 public class CardController {
     @Autowired
+    private CardService cardService;
+    @Autowired
+    private ClientService clientService;
+    @Autowired
     private CardRepository cardRepository;
     @Autowired
     private ClientRepository clientRepository;
@@ -41,7 +47,7 @@ public class CardController {
             @RequestParam CardType cardType,
             Authentication authentication){
 
-        Client authenticated = clientRepository.findByEmail(authentication.getName());
+        Client authenticated = clientService.findByEmail(authentication.getName());
 
         Set<Card> totalCards = authenticated.getCards();
 
@@ -101,7 +107,7 @@ public class CardController {
         //Create card and add it to client and card table:
         Card createdCard = new Card(cardHolder, cardType, cardColor, cardNumber, cvv, fromDate, thruDate);
         authenticated.addCard(createdCard);
-        cardRepository.save(createdCard);
+        cardService.save(createdCard);
 
         return new ResponseEntity<>(new CardDTO(createdCard), HttpStatus.CREATED);
 
@@ -109,7 +115,7 @@ public class CardController {
 
     @RequestMapping("/clients/current/cards")
     public List<CardDTO> getCards(Authentication authentication){
-        Client authenticated = clientRepository.findByEmail(authentication.getName());
+        Client authenticated = clientService.findByEmail(authentication.getName());
         return authenticated.getCards().stream().map(card -> new CardDTO(card)).collect(toList());
     }
 
