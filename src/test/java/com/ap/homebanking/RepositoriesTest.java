@@ -1,7 +1,7 @@
 package com.ap.homebanking;
 
 import com.ap.homebanking.models.Loan;
-import com.ap.homebanking.repositories.LoanRepository;
+import com.ap.homebanking.repositories.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -19,7 +19,15 @@ import static org.hamcrest.Matchers.*;
 @SpringBootTest
 public class RepositoriesTest {
     @Autowired
-    LoanRepository loanRepository;
+    private AccountRepository accountRepository;
+    @Autowired
+    private CardRepository cardRepository;
+    @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private LoanRepository loanRepository;
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     @Test
     public void existLoans(){
