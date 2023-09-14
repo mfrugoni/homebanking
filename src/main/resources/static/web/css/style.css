@@ -34,7 +34,11 @@
 }
 
 #create {
-    margin-bottom: 15px;
+    margin: 15px;
+}
+
+#delete {
+    margin: 15px;
 }
 
 .credit-transaction {

@@ -93,8 +93,10 @@ public class CardController {
 
         String cvv = createCvv();
 
+        boolean isActive = true;
+
         //Create card and add it to client and card table:
-        Card createdCard = new Card(cardHolder, cardType, cardColor, cardNumber, cvv, fromDate, thruDate);
+        Card createdCard = new Card(cardHolder, cardType, cardColor, cardNumber, cvv, fromDate, thruDate, isActive);
         authenticated.addCard(createdCard);
         cardService.save(createdCard);
 
@@ -106,6 +108,18 @@ public class CardController {
     public List<CardDTO> getCards(Authentication authentication){
         Client authenticated = clientService.findByEmail(authentication.getName());
         return authenticated.getCards().stream().map(card -> new CardDTO(card)).collect(toList());
+    }
+
+    @PatchMapping("/clients/current/cards")
+    public  ResponseEntity<Object> editCardIsActive(
+            @RequestParam String cardNumber){
+
+        Card cardToEdit = cardService.findByNumber(cardNumber);
+        cardToEdit.setIsActive(false);
+        cardService.save(cardToEdit);
+
+        return new ResponseEntity<>("Card logic deleted", HttpStatus.OK);
+
     }
 
 

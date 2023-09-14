@@ -111,11 +111,11 @@ public class HomebankingApplication {
 
 			//Cards data:
 			String melbaCardHolder = client1.getFirstName() + " " + client1.getLastName();
-			Card melbaGoldDebit = new Card(melbaCardHolder, CardType.DEBIT, CardColor.GOLD, "5555 6666 7777 8888", "773", LocalDate.now(), LocalDate.now().plusYears(5));
-			Card melbaTitaniumCredit = new Card(melbaCardHolder, CardType.CREDIT, CardColor.TITANIUM, "1212 3333 1029 3847", "182", LocalDate.now(), LocalDate.now().plusYears(5));
+			Card melbaGoldDebit = new Card(melbaCardHolder, CardType.DEBIT, CardColor.GOLD, "5555 6666 7777 8888", "773", LocalDate.now(), LocalDate.now().plusYears(5), true);
+			Card melbaTitaniumCredit = new Card(melbaCardHolder, CardType.CREDIT, CardColor.TITANIUM, "1212 3333 1029 3847", "182", LocalDate.now(), LocalDate.now().plusYears(5), true);
 
 			String mikaCardHolder = client2.getFirstName() + " " + client2.getLastName();
-			Card mikaSilverCredit = new Card(mikaCardHolder, CardType.CREDIT, CardColor.SILVER, "9201 8374 7566 0101", "555", LocalDate.now(), LocalDate.now().plusYears(4));
+			Card mikaSilverCredit = new Card(mikaCardHolder, CardType.CREDIT, CardColor.SILVER, "9201 8374 7566 0101", "555", LocalDate.now(), LocalDate.now().plusYears(4), true);
 
 			client1.addCard(melbaGoldDebit);
 			client1.addCard(melbaTitaniumCredit);
