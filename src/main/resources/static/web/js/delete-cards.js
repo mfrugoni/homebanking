@@ -1,20 +1,20 @@
 Vue.createApp({
     data() {
         return {
-            clientInfo: {},
             cards: [],
-            cardNumber: null,
+            cardNumber: "none",
             errorToats: null,
             errorMsg: null,
         }
     },
     methods: {
         getData: function () {
-                    axios.get("/api/clients/current")
+                    axios.get("/api/clients/current/cards")
                         .then((response) => {
-                            //get client info
-                            this.clientInfo = response.data;
-                            this.cards = this.clientInfo.cards;
+                            //get cards info
+                            //this.cards = response;
+                            //console.log(this.cards);
+                            console.log(response.data);
                         })
                         .catch((error) => {
                             this.errorMsg = "Error getting data";
@@ -43,7 +43,7 @@ Vue.createApp({
                         'content-type': 'application/x-www-form-urlencoded'
                     }
                 }
-                axios.post(`/api/clients/current/cards?cardType=${this.cardType}&cardColor=${this.cardColor}`, config)
+                axios.post(`/api/clients/current/cards/del?cardNumber=${this.cardNumber}`, config)
                     .then(response => window.location.href = "/web/cards.html")
                     .catch((error) => {
                         this.errorMsg = error.response.data;

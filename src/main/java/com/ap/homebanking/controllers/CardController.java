@@ -110,8 +110,8 @@ public class CardController {
         return authenticated.getCards().stream().map(card -> new CardDTO(card)).collect(toList());
     }
 
-    @PatchMapping("/clients/current/cards")
-    public  ResponseEntity<Object> editCardIsActive(
+    @DeleteMapping("/clients/current/cards")
+    public ResponseEntity<Object> editCardIsActive(
             @RequestParam String cardNumber){
 
         Card cardToEdit = cardService.findByNumber(cardNumber);
