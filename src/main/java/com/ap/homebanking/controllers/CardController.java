@@ -110,18 +110,20 @@ public class CardController {
         return authenticated.getCards().stream().map(card -> new CardDTO(card)).collect(toList());
     }
 
-    @DeleteMapping("/clients/current/cards")
+    @PatchMapping("/clients/current/cards")
     public ResponseEntity<Object> editCardIsActive(
-            @RequestParam String cardNumber){
+            @RequestParam long id){
 
-        Card cardToEdit = cardService.findByNumber(cardNumber);
-        cardToEdit.setIsActive(false);
-        cardService.save(cardToEdit);
+        Card cardToEdit = cardService.findById(id);
+        if (cardToEdit == null)
+            return new ResponseEntity<>("This card doesn't exist in our DB", HttpStatus.FORBIDDEN);
+        else {
+            cardToEdit.setIsActive(false);
+            cardService.save(cardToEdit);
 
-        return new ResponseEntity<>("Card logic deleted", HttpStatus.OK);
-
+            return new ResponseEntity<>("Card logic deleted", HttpStatus.OK);
+        }
     }
-
 
     //Methods to create necessary arguments for cards  creation:
 

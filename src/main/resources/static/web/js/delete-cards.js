@@ -2,25 +2,28 @@ Vue.createApp({
     data() {
         return {
             cards: [],
-            cardNumber: "none",
+            activeCards: [],
+            cardId: 0 ,
             errorToats: null,
             errorMsg: null,
         }
     },
     methods: {
         getData: function () {
-                    axios.get("/api/clients/current/cards")
-                        .then((response) => {
-                            //get cards info
-                            //this.cards = response;
-                            //console.log(this.cards);
-                            console.log(response.data);
-                        })
-                        .catch((error) => {
-                            this.errorMsg = "Error getting data";
-                            this.errorToats.show();
-                        })
-                },
+            axios.get("/api/clients/current/cards")
+                .then((response) => {
+                        //get active cards info:
+                        this.cards = response.data;
+                        console.log(this.cards);
+                        this.activeCards = this.cards.filter(card => card.isActive == true);
+                        console.log(this.activeCards);
+
+                })
+                .catch((error) => {
+                    this.errorMsg = "Error getting data";
+                    this.errorToats.show();
+                })
+        },
         formatDate: function (date) {
             return new Date(date).toLocaleDateString('en-gb');
         },
@@ -32,10 +35,10 @@ Vue.createApp({
                     this.errorToats.show();
                 })
         },
-        delete: function (event) {
+        erase: function (event) {
             event.preventDefault();
-            if (this.cardNumber == "none") {
-                this.errorMsg = "You must select a card number";
+            if (this.cardId == 0) {
+                this.errorMsg = "You must select a card to delete";
                 this.errorToats.show();
             } else {
                 let config = {
@@ -43,16 +46,27 @@ Vue.createApp({
                         'content-type': 'application/x-www-form-urlencoded'
                     }
                 }
-                axios.post(`/api/clients/current/cards/del?cardNumber=${this.cardNumber}`, config)
+                axios.patch(`/api/clients/current/cards?id=${this.cardId}`, config)
                     .then(response => window.location.href = "/web/cards.html")
                     .catch((error) => {
                         this.errorMsg = error.response.data;
                         this.errorToats.show();
                     })
             }
-        }
+        },
+//        checkInput: function (){
+//                if (this.cardId == 0) {
+//                   this.errorMsg = "You must select a card to delete";
+//                   this.errorToats.show();
+//                } else {
+//                this.modal.show();
+//                }
+//        },
+
     },
     mounted: function () {
         this.errorToats = new bootstrap.Toast(document.getElementById('danger-toast'));
+//        this.modal = new bootstrap.Modal(document.getElementById('confirModal'));
+        this.getData();
     }
 }).mount('#app')

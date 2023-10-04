@@ -72,24 +72,16 @@
                 <div class="row mt-3">
                     <div class="col-6">
                         <h2 class="display-6 subtitle">Delete card</h2>
-                        <form class="mt-4" v-on:submit="delete($event)">
+                        <form class="mt-4" v-on:submit="erase($event)">
                             <div class="row mb-3">
-                                <label for="card-number" class="col-sm-4 col-form-label ">Select card number:</label>
+                                <label for="card-id" class="col-sm-4 col-form-label ">Select card:</label>
                                 <div class="col-sm-7">
-                                    <select id="card-number" class="form-select"
+                                    <select id="card-id" v-model="cardId" class="form-select"
                                             aria-label="Default select example" required>
-                                        <option value="none">Open this select menu</option>
-                                        <option v-for="card in cards" value="card.number">{{ card.number }}</option>
+                                        <option value="0">Open this select menu</option>
+                                        <option v-for="card in activeCards" v-bind:value="card.id">
+                                            {{ card.type }} CARD | Number: {{ card.number }}</option>
                                     </select>
-
-                                    <div v-for="card in cards">
-                                       <h2>{{ card }}</h2>
-                                    </div>
-                                    <ul>
-                                        <li v-for="card in cards">
-                                            {{ card.number }}
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-sm btn-danger">Delete</button>
@@ -99,6 +91,42 @@
                 <div class="row">
 
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="confirModal" tabindex="-1" aria-labelledby="confirModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirModalLabel">Confirm Card Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Deleting cards cannot be undone, do you want to continue?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" v-on:click="apply" class="btn btn-sm btn-success">Yes, delete Card</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal 2-->
+<div class="modal fade" id="okModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="okModalLabel">Card was deleted!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                You can´t use the deleted card anymore.<i class="bi bi-check-circle-fill text-success"></i>
+            </div>
+            <div class="modal-footer">
+                <button type="button" v-on:click="finish" class="btn btn-sm btn-success"
+                        data-bs-dismiss="modal">Ok</button>
             </div>
         </div>
     </div>
