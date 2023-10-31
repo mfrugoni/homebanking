@@ -85,7 +85,7 @@ public class RepositoriesTest {
 
     @Test
     public void checkDate(){
-        Transaction transaction = transactionRepository.findById(25L).orElse(null);
+        Transaction transaction = transactionRepository.findById(4L).orElse(null);
         assertThat(transaction.getDate(), isA(LocalDateTime.class));
     }
 }
