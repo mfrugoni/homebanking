@@ -33,7 +33,7 @@ public class HomebankingApplication {
 		return (args -> {
 
 			//Melba Morel Data:
-/*			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("melba"));
+			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("melba"));
 
 			LocalDate today = LocalDate.now();
 			Account account1 = new Account("VIN001", today, 5000);
@@ -128,7 +128,7 @@ public class HomebankingApplication {
 			//Admin data (auth):
 			Client clientAdmin = new Client("admin", "admin", "admin@admin.com", passwordEncoder.encode("admin"));
 			clientRepository.save(clientAdmin);
-*/
+
 		});
 	}
 
